@@ -4,7 +4,7 @@ info:
   description: This API lets users get solar panel energy and cost estimations based on their address.
   version: 1.0.0
 servers:
-  - url: https://api.34-110-134-67.nip.io
+  - url: https://api.example-ip.nip.io
 security:
   - ApiKeyAuth: []
 paths:
@@ -23,8 +23,8 @@ paths:
                 address:
                   description: The address to check the solar potential of.
                   type: string
-                  example: Landsvägen 40, 172 63 Sundbyberg, Sweden
-              example: { "address": "Landsvägen 40, 172 63 Sundbyberg, Sweden"}
+                  example: 1900 Reston Metro Plaza, Reston, VA 20190, USA
+              example: { "address": "1900 Reston Metro Plaza, Reston, VA 20190, USA"}
         required: true
       responses:
         '200':
