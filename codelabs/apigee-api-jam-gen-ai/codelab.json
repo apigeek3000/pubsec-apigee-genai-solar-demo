@@ -6,8 +6,8 @@
   "updated": "2024-04-24T15:59:05Z",
   "id": "apigee-api-jam-gen-ai",
   "duration": 40,
-  "title": "Apigee API Jam - Gen AI",
-  "authors": "Tyler Ayers",
+  "title": "Apigee API Jam - Gen AI - Public Sector",
+  "authors": "Tyler Ayers, Raven Hedden",
   "summary": "In this codelab you will build an Apigee project that publishes an API for a Gen AI Model, as well as an extension to be used by LLM chat apps such as Vertex AI Agent Builder",
   "source": "1PQSpapL8h8vrt60GA471GoetJmmBPJJYShPUkvyW8c8",
   "theme": "apigee",
@@ -22,6 +22,6 @@
   "tags": [
     "apijam"
   ],
-  "feedback": "https://github.com/tyayers/apigee-genai-solar-demo/issues",
+  "feedback": "https://github.com/apigeek3000/pubsec-apigee-genai-solar-demo/issues",
   "url": "apigee-api-jam-gen-ai"
 }

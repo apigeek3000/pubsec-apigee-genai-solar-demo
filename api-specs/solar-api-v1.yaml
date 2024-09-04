@@ -4,7 +4,7 @@ info:
   description: This API lets users get solar panel energy and cost estimations based on their address.
   version: 1.0.0
 servers:
-  - url: https://api.example-ip.nip.io
+  - url: https://example-api.nip.io
 security:
   - ApiKeyAuth: []
 paths:
