@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.0.1
 info:
   title: Solar Panel Estimation API
   description: This API lets users get solar panel energy and cost estimations based on their address.
@@ -34,7 +34,7 @@ paths:
                 $ref: '#/components/schemas/SolarEstimation'
           description: Solar panel estimation created successfully for the given address.
       summary: Create a new solar panel estimation for a given address.
-  /v1/solar-service/question:
+  /v1/solar-service/questions:
     post:
       operationId: answerSolarQuestion
       description: Answers general questions about solar energy.
@@ -80,7 +80,7 @@ components:
         address:
           type: string
           description: The address that was sent to create the solar energy estimation for.
-          example: Landsvägen 40, 172 63 Sundbyberg, Sweden
+          example: 1900 Reston Metro Plaza, Reston, VA 20190, USA
         breakEvenInYears:
           description: How many years would it potentially take to break even with the investment and earnings of the solar panel installation.
           type: number
@@ -114,4 +114,4 @@ components:
           type: number
           example: 172010
       type: object
-      example: {"address":"Landsvägen 40, 172 63 Sundbyberg, Sweden","maxArrayPanelsCount":171,"maxArrayAreaMeters2":279.8928,"maxSunshineHoursPerYear":1107.2517,"carbonOffsetFactorKgPerMwh":11.999986,"totalKwPotentialPerYear":75736.01628,"marketValueOfKwPotentialPerYear":7573.601628,"costToInstallPanels":164160,"breakEvenInYears":22}
+      example: {"address":"1900 Reston Metro Plaza, Reston, VA 20190, USA","maxArrayPanelsCount":171,"maxArrayAreaMeters2":279.8928,"maxSunshineHoursPerYear":1107.2517,"carbonOffsetFactorKgPerMwh":11.999986,"totalKwPotentialPerYear":75736.01628,"marketValueOfKwPotentialPerYear":7573.601628,"costToInstallPanels":164160,"breakEvenInYears":22}

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solar | Department of Environmental Science</title>
+<style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    .header { background: url('solar-panels.jpg') no-repeat center center/cover; color: white; text-align: center; padding: 100px 20px; }
+    .section { padding: 40px 20px; }
+    .section:nth-child(even) { background-color: #f4f4f4; }
+    .container { max-width: 800px; margin: auto; }
+    h1, h2 { color: #333; }
+    p { margin: 20px 0; }
+    .btn { display: inline-block; background-color: #008f39; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+    .pricing-table { width: 100%; }
+    .pricing-table th, .pricing-table td { text-align: left; padding: 8px; }
+    .pricing-table tr:nth-child(even) { background-color: #dddddd; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Department of Environmental Science | Solar Energy</h1>
+    <a href="#contact" class="btn">Get in Touch</a>
+</div>
+
+<div class="section">
+    <div class="container">
+        <h2>About Us</h2>
+        <p>Solar energy is the fastest growing and most affordable source of new electricity in America. As the cost of solar energy systems dropped significantly, more Americans and businesses have taken advantage of clean energy.</p>
+    </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <h2>Solar Information</h2>
+        <p>Use the Solar Chatbot to ask questions about solar energy and see if solar energy would be right for you.</p>
+        <!-- Insert package details here -->
+    </div>
+</div>
+
+<div class="section" id="contact">
+    <div class="container">
+        <h2>Contact Us</h2>
+        <p>For inquiries, please reach out to us:</p>
+        <p>Email: solar@cloud.edu</p>
+        <p>Phone: +1 (123) 456-7890</p>
+        <!-- Insert a contact form if necessary -->
+    </div>
+</div>
+
+<!-- BEGIN DIALOGFLOW SNIPPET -->
+<link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+<script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+<df-messenger
+  location="us-central1"
+  project-id="hedden-apigee-sandbox"
+  agent-id="f38cf469-c1f5-48bb-9356-33e8445c9378"
+  language-code="en"
+  max-query-length="-1">
+  <df-messenger-chat-bubble
+   chat-title="Solar Agent">
+  </df-messenger-chat-bubble>
+</df-messenger>
+<style>
+  df-messenger {
+    z-index: 999;
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+  }
+</style>
+<!-- END DIALOGFLOW SNIPPET -->
+
+</body>
+</html>
