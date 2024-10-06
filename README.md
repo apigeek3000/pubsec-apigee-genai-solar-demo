@@ -4,7 +4,7 @@ In this project we use Google Cloud Apigee to run an API platform for our Gen AI
 
 Here is an architecture overview of the solution.
 
-![Apigee Gen AI demo architecture](images/architecture-v1.png)
+![Apigee Gen AI demo architecture](images/architecture-v2.png)
 
 You can go through the deployment steps in your own Google Cloud project by starting the codelab here:
 
