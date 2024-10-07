@@ -102,7 +102,7 @@ export PATH=$PATH:$HOME/.apigeecli/bin</code></pre>
 <p>Clone the repository at <a href="https://github.com/apigeek3000/pubsec-apigee-genai-solar-demo" target="_blank">https://github.com/apigeek3000/pubsec-apigee-genai-solar-demo</a> in your shell with the following command:</p>
 <pre><code>git clone https://github.com/apigeek3000/pubsec-apigee-genai-solar-demo.git
 
-cd apigee-genai-solar-demo</code></pre>
+cd pubsec-apigee-genai-solar-demo</code></pre>
 <p>You should now have your Apigee org set up, and the code assets cloned in your own shell environment.</p>
 <h2 is-upgraded><strong>Get a Google Maps API key</strong></h2>
 <p>We will be using the Google Maps Geolocation and Solar APIs in this lab, so we will need to get an API key to use in our app.</p>
@@ -120,7 +120,7 @@ cd apigee-genai-solar-demo</code></pre>
 <p>We need to automate the deployment of our demo assets, and so will be using the <a href="https://cloud.google.com/sdk/docs/install" target="_blank">gcloud CLI</a> to deploy a lot of our assets. Make sure <strong>gcloud</strong> is installed (installed by default in Cloud Shell).</p>
 <p>Now we need to set our environment information for further automation commands. Let&#39;s make a copy of the environment file 1_env.sh, edit with our own environment information, and then source it in our shell. </p>
 <pre><code>cp 1_env.sh 1_env.dev.sh</code></pre>
-<p>Edit the file <strong>1_env.dev.sh</strong> and set your GCP project and region information (your GCP Project Id and chosen region such as <strong>europe-west1</strong>). Also set your Apigee environment (if you are using an Apigee evaluation instance then it is <strong>eval</strong>).</p>
+<p>Edit the file <strong>1_env.dev.sh</strong> and set your GCP project and region information (your GCP Project Id and chosen region such as <strong>us-central1</strong>). Also set your Apigee environment (if you are using an Apigee evaluation instance then it is <strong>eval</strong>).</p>
 <pre><code>export PROJECT=YOUR GCP PROJECT ID
 export REGION=YOUR GCP REGION
 export APIGEE_ENVIRONMENT=YOUR ENVIRONMENT</code></pre>

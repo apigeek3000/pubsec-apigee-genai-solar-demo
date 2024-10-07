@@ -21,7 +21,7 @@
   <Flows/>
   <HTTPTargetConnection>
     <Properties/>
-    <URL>https://europe-west1-aiplatform.googleapis.com/v1/projects/{organization.name}/locations/europe-west1/publishers/google/models/gemini-1.0-pro:streamGenerateContent</URL>
+    <URL>https://us-central1-aiplatform.googleapis.com/v1/projects/{organization.name}/locations/us-central1/publishers/google/models/gemini-1.0-pro:streamGenerateContent</URL>
     <Authentication>
       <GoogleAccessToken>
         <Scopes>
