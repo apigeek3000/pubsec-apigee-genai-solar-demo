@@ -5,6 +5,9 @@
   <PreFlow name="PreFlow">
     <Request>
       <Step>
+        <Name>CORS-Enable</Name>
+      </Step>
+      <Step>
         <Name>VA-VerifyKey</Name>
       </Step>
       <Step>

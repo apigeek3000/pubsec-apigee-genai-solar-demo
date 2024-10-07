@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <meta name="theme-color" content="#4F7DC9">
   <meta charset="UTF-8">
-  <title>Apigee API Jam - Gen AI</title>
+  <title>Apigee GenAI Solar Agent</title>
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
   <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
@@ -24,7 +24,7 @@
   <google-codelab codelab-gaid=""
                   codelab-ga4id=""
                   id="apigee-api-jam-gen-ai"
-                  title="Apigee API Jam - Gen AI"
+                  title="Apigee GenAI Solar Agent"
                   environment="web"
                   feedback-link="https://github.com/apigeek3000/pubsec-apigee-genai-solar-demo/issues">
     
@@ -138,7 +138,7 @@ gcloud services enable geocoding-backend.googleapis.com</code></pre>
 <pre><code>gcloud iam service-accounts create solarservice \
     --description=&#34;Solar service account&#34; \
     --display-name=&#34;Solar service&#34;</code></pre>
-<p>Now give the account the role access to use the Gemini Pro model. This will allow our API (which will use this service account) to access Vertex AI models such as Gemini Pro.</p>
+<p>Now give the account the role access to use the Gemini Pro model. This will allow our API (which will use this service account) to access Vertex AI models such as Gemini Pro. If prompted, specify None as a policy condition.</p>
 <pre><code>gcloud projects add-iam-policy-binding $PROJECT \
 --member=&#34;serviceAccount:solarservice@$PROJECT.iam.gserviceaccount.com&#34; \
 --role=&#34;roles/aiplatform.user&#34;
@@ -193,9 +193,9 @@ apigeecli kvms entries create -m solar-keys -k gmaps_key -l $GMAPS_KEY -e $APIGE
 <p>Click on the <strong>Proxy endpoints &gt; default</strong> in the left menu about half-way down.</p>
 <p>This shows the flow that is executed when a user calls the default endpoint (/v1/solar-service).</p>
 <p class="image-container"><img style="width: 650.39px" src="img/aab336a0cb493376.png"></p>
-<p>First, we are verifying the user&#39;s API key, then removing that key from the further traffic, getting and validating the inputs, and retrieving our <strong>Google Maps API key</strong> from the KVM that we set earlier.</p>
+<p>First, we are verifying the user&#39;s API key, then applying a request quota,then removing that key from the further traffic, getting and validating the inputs, and retrieving our <strong>Google Maps API key</strong> from the KVM that we set earlier.</p>
 <p>Then there is an optional <strong>GetGeoLocation</strong> flow that is run if the user sent a text address, and which converts it into latitude and longitude coordinates using the maps geolocation API.</p>
-<p>After that the request goes to the <strong>Target</strong> (which is the <strong>Google Maps Solar API</strong>) and then on the <strong>Response</strong> side we have some steps to convert and format the data. There is even a small Javascript script to do some solar financial calculations that normally a domain service would do, but which we are simulating in our API proxy for the purpose of this lab.</p>
+<p>After that the request goes to a <strong>Target</strong> (which is either the <strong>Google Maps Solar API</strong> or the <strong>Gemini API</strong>) and then on the <strong>Response</strong> side for each target we have some steps to convert and format the data. There is even a small Javascript script to do some solar financial calculations that normally a domain service would do, but which we are simulating in our API proxy for the purpose of this lab.</p>
 <h2 is-upgraded><strong>Test the API proxy</strong></h2>
 <p>Let&#39;s now test out our API. Click on the <strong>DEBUG</strong> tab at the top of the screen to start an Apigee debug session. A debug session will trace live traffic from our API, and let us step through the processing steps in real-time.</p>
 <p class="image-container"><img style="width: 681.13px" src="img/e62133b2aad7802.png"></p>
@@ -233,7 +233,7 @@ apigeecli products create -n &#34;$PRODUCT_NAME&#34; \
 <p class="image-container"><img style="width: 670.67px" src="img/d4d7f879150a59b7.png"></p>
 <p>Now let&#39;s create a test developer and test credentials.</p>
 <p>Set an environment variable with a sample email address for a developer.</p>
-<pre><code>DEVELOPER_EMAIL=&#34;example-developer@cymbalgroup.com&#34;
+<pre><code>DEVELOPER_EMAIL=&#34;example-developer@example.com&#34;
 </code></pre>
 <p>Create the developer in Apigee using apigeecli.</p>
 <pre><code>apigeecli developers create -n &#34;$DEVELOPER_EMAIL&#34; \
@@ -241,7 +241,7 @@ apigeecli products create -n &#34;$PRODUCT_NAME&#34; \
   -u &#34;$DEVELOPER_EMAIL&#34; -o &#34;$PROJECT&#34; -t $(gcloud auth print-access-token)
 </code></pre>
 <p>Now let&#39;s create an app subscription using the test developer account.</p>
-<pre><code>APP_NAME=example-app-1
+<pre><code>APP_NAME=Solar-AI-Agent-App
 apigeecli apps create --name &#34;$APP_NAME&#34; \
   --email &#34;$DEVELOPER_EMAIL&#34; \
   --prods &#34;$PRODUCT_NAME&#34; \
@@ -299,21 +299,22 @@ EOF
 <p>In case the service isn&#39;t enabled, click on <strong>CONTINUE</strong> to activate the API and continue to the app.</p>
 <p>You should see a menu of different types of apps to create, click on the last option <strong>Agent</strong>.</p>
 <p class="image-container"><img style="width: 677.50px" src="img/12e12aa5f4376332.png"></p>
-<p>Give your app a name and click <strong>AGREE &amp; CREATE</strong>.</p>
+<p>Give your app a name like <strong>Solar-AI-App</strong>, select a region like <strong>us-central1</strong>, and click <strong>AGREE &amp; CREATE</strong>.</p>
 <p>After a bit your app will be created, then click on <strong>Tools</strong> in the left menu, and click on <strong>+ Create</strong> to create a new tool. The tool will be the link to our API.</p>
-<p>Give the tool the name <strong>Solar-Service</strong>, and paste the <strong>Open API spec</strong> from the previous section (where we replaced the server url) into the <strong>Schema</strong> box. </p>
-<p>Select <strong>API Key</strong> as the <strong>Authentication type</strong>, and <strong>Request header</strong> as the API Key location. Paste the API key that we generated above when we tested the API into the <strong>API key secret</strong> box.</p>
+<p>Give the tool the name <strong>SolarService</strong>, select <strong>OpenAPI</strong> as <strong>Type</strong>, paste in <strong>Provides solar estimation services for a given address</strong> in <strong>Description</strong>, and paste the <strong>Open API spec</strong> from the previous section (where we replaced the server url) into the <strong>Schema</strong> box. </p>
+<p>Select <strong>API Key</strong> as the <strong>Authentication type</strong>, and <strong>Request header</strong> as the API Key location. Header name is <strong>x-api-key</strong> past the API key that we generated above when we tested the API into the <strong>API key secret</strong> box.</p>
 <p>Then scroll to the top of the screen and press <strong>Save</strong>.</p>
 <p class="image-container"><img style="width: 681.50px" src="img/b8e99f80199496a9.png"></p>
 <p>Now go back to the <strong>Agents</strong> section and click on the <strong>Default Generative Agent.</strong></p>
+<p>For <strong>Agent name</strong> provide something like <strong>Solar AI Agent</strong></p>
 <p>In the <strong>Goal</strong> field input a goal such as <strong>Provide solar estimation services for addresses.</strong></p>
 <p>Next to <strong>Instructions</strong> click on the <strong>Sample</strong> button and copy the Sample instructions, and then paste them in the Instructions text box.</p>
-<p>Replace <strong>Example tool name</strong> with <strong>Solar-Service</strong> and remove the complete next entry with <strong>${AGENT}.</strong> Your instruction box should look like this.</p>
+<p>Replace <strong>Example tool name</strong> with <strong>SolarService</strong> and remove the complete next entry with <strong>${AGENT}.</strong> Your instruction box should look like this.</p>
 <p class="image-container"><img style="width: 673.50px" src="img/98e0b8b72581ec22.png"></p>
 <p>Now click <strong>Save</strong> to save the instructions. </p>
 <p>Now type &#34;hi&#34; in the Send message box to the right, and ask the bot if any address would be good for solar panels. The bot will automatically use the configured API to answer questions about solar panel evaluations for roofs at addresses, and you can add many more tools and data stores to enrich the skills of the bot.</p>
 <p class="image-container"><img style="width: 674.30px" src="img/b2cbd005e0cc65b8.png"></p>
-<p>You can click on the <strong>Solar-Service</strong> bar in the conversation to open up the diagnostics information and see the exact request and response of the communication.</p>
+<p>You can click on the <strong>SolarService</strong> bar in the conversation to open up the diagnostics information and see the exact request and response of the communication.</p>
 <p>Try asking the question in different ways, with and without giving an address, and see how the agent adapts and makes sure to ask the right questions to get the needed inputs before calling the API. It&#39;s impressive what&#39;s possible now with the need for any coding of the integration!</p>
 <p>Click on the <strong>Integrations</strong> menu item on the left side of the screen to see various channels where the bot can be added, as well as providing language services via API to other apps.</p>
 <h2 is-upgraded><strong>Test a Gen AI model API</strong></h2>
@@ -344,13 +345,13 @@ EOF
 <p>Here we have an API endpoint in Apigee offering both backend service (Solar API) and Gen AI model (Gemini Pro) features to users with unified authentication &amp; authorization, traffic management, and analytics. Take some time to <a href="https://cloud.google.com/apigee/resources" target="_blank">explore further guides</a> on adding more features to your APIs.</p>
 <p><strong>Deploy web test site</strong></p>
 <p>As a last step, let&#39;s deploy a test web site that uses our Vertex AI Conversations bot.</p>
-<p>In the cloud shell editor, open the file in the cloned project folder <strong>public/index.html</strong> and find the snippet at the bottom with code containing <strong>&lt;!-- BEGIN DIALOGFLOW SNIPPET –&gt;</strong>. We&#39;re going to replace this with your own conversation bot code.</p>
+<p>In the cloud shell editor, open the following files in the cloned project folder <strong>public/index-edu.html</strong> and <strong>public/index-state.html</strong> and find the snippet at the bottom with code containing <strong>&lt;!-- BEGIN DIALOGFLOW SNIPPET –&gt;</strong>. We&#39;re going to replace this with your own conversation bot code.</p>
 <p class="image-container"><img style="width: 686.79px" src="img/eaec0fc04df6b533.png"></p>
 <p>Now go back to the window with <strong>Vertex AI Agent Builder</strong>, or if it&#39;s now longer open, open it again here and go to the definition of your playbook app.</p>
 <p><a href="https://console.cloud.google.com/gen-app-builder" target="_blank"><paper-button class="colored" raised>Open Vertex Agent Builder</paper-button></a></p>
 <p>Go to <strong>Integrations</strong>, and select <strong>Dialogflow Messenger</strong>. Enable the integration and copy the code snippet that is displayed.</p>
 <p class="image-container"><img style="width: 669.38px" src="img/c3a276ebb930ea41.png"></p>
-<p>Replace the code snippet back in our <strong>index.html</strong> in the Cloud Shell editor with your own snippet, and save the file.</p>
+<p>Replace the code snippet back in our index html files in the Cloud Shell editor with your own snippet, and save the files.</p>
 <p>Now go to the <strong>Cloud Shell console</strong> at the bottom of the screen. Make sure that you are in the project directory with our source code, and type <strong>npm i &amp;&amp; node index.js</strong> and press Enter. This will install and run a small web app that uses the Dialogflow messenger integration for testing.</p>
 <p>Click on the button <strong>Web Preview</strong> at the top right of the screen to test your web app in your browser. Click on the button <strong>Preview on port 8080</strong>, and now test your Dialogflow app in a sample web page. Append either /edu or /state to your url for an EDU or State site depending on your use case.</p>
 <p class="image-container"><img style="width: 673.06px" src="img/3c103d2662baa4ce.png"></p>

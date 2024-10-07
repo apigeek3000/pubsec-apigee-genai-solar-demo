@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="37" name="Solar-Service-v1">
+<APIProxy revision="3" name="Solar-Service-v1">
   <DisplayName/>
   <Description>This API provides solar calculations services for any address or lat/long input.</Description>
-  <CreatedAt>1711031025554</CreatedAt>
-  <LastModifiedAt>1711031025554</LastModifiedAt>
+  <CreatedAt>1725857226631</CreatedAt>
+  <LastModifiedAt>1728302413161</LastModifiedAt>
   <BasePaths>/v1/solar-service</BasePaths>
   <Policies>
-    <Policy>VA-VerifyKey</Policy>
-    <Policy>AM-RemoveKey</Policy>
-    <Policy>EV-GetInputs</Policy>
-    <Policy>SC-GetGeolocation</Policy>
-    <Policy>RF-ValidateInputs</Policy>
-    <Policy>KVM-GetMapsKey</Policy>
-    <Policy>EV-GetGeolocationResults</Policy>
-    <Policy>AM-SetTargetData</Policy>
-    <Policy>AM-SetResponse</Policy>
     <Policy>EV-GetSolarResults</Policy>
-    <Policy>JS-CalculateSolarData</Policy>
+    <Policy>RF-ValidateInputs</Policy>
     <Policy>AM-SetGeminiData</Policy>
+    <Policy>AM-SetResponse</Policy>
+    <Policy>EV-GetGeolocationResults</Policy>
+    <Policy>SC-GetGeolocation</Policy>
+    <Policy>VA-VerifyKey</Policy>
+    <Policy>KVM-GetMapsKey</Policy>
+    <Policy>AM-RemoveKey</Policy>
     <Policy>JS-SetGeminiResponse</Policy>
+    <Policy>EV-GetInputs</Policy>
+    <Policy>JS-CalculateSolarData</Policy>
+    <Policy>AM-SetTargetData</Policy>
+    <Policy>CORS-Enable</Policy>
+    <Policy>Q-EnforceQuota</Policy>
   </Policies>
   <ProxyEndpoints>
     <ProxyEndpoint>default</ProxyEndpoint>
