@@ -49,7 +49,7 @@ def header_text():
     )
   ):
     me.text(
-      "Cloudland Department of Energy | Solar Services",
+      "Department of Energy | Solar Services",
       style=me.Style(
         font_size=36,
         font_weight=700,
@@ -61,7 +61,8 @@ def header_text():
 
 EXAMPLES = [
   "What are the most efficient types of solar panels?",
-  "Is this a good address for Solar Panels?",
+  "Is this a good address for Solar Panels? 1900 Reston Metro Plaza, Reston, VA 20190",
+  "Is it more beneficial to install solar panels at X or at Y?"
 ]
 
 
