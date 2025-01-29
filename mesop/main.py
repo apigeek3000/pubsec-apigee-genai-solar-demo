@@ -16,6 +16,7 @@ class State:
 
 @me.page(path="/")
 def page():
+  me.set_page_title("Solar AI Agent")
   with me.box(
     style=me.Style(
       background="#fff",
@@ -183,15 +184,22 @@ def call_api(input, first_input):
   }
   data = {"question": input}
   print(url)
-  response = requests.post(url, headers=headers, json=data)
-  print('RESPONSE')
-  print(response)
-  output = response.json()
-  print('OUTPUT')
-  print(output)
-  answer=output["answer"]
-  yield "\n\nAI Agent: " + answer
-
+  try:
+    response = requests.post(url, headers=headers, json=data)
+    print(response)
+    resp_status_code = response.status_code
+    if resp_status_code == 200:
+      resp_data = response.json()
+      print(resp_data)
+      answer=resp_data["answer"]
+      yield "\n\nAI Agent: " + answer
+    elif resp_status_code == 422:
+      yield "\n\nPlease do not upload personal information."
+    else:
+      yield "\n\nThere was an issue responding, try asking your question a different way."
+  except Exception as e:
+    print(e)
+    yield "\n\nUnknown error occured, please try again."
 
 def output():
   state = me.state(State)
