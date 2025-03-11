@@ -3,7 +3,16 @@ import os
 import requests
 import mesop as me
 
-# pylint: disable=bad-indentation,c-extension-no-member
+# pylint: disable=bad-indentation,c-extension-no-member,broad-exception-caught
+
+SESSION_ID = "1" # Use any alphanumeric string to determine new conversation/session
+PROMPT_EXAMPLES = [
+  "What are the most efficient types of solar panels?",
+  "Create a new solar panel estimation for the given address. ",
+  "Can you tell me more about the solar panel financials at that location?"
+]
+APIGEE_KEY = os.environ.get("APIGEE_KEY")
+APIGEE_DOMAIN = os.environ.get("APIGEE_DOMAIN")
 
 
 @me.stateclass
@@ -60,13 +69,6 @@ def header_text():
     )
 
 
-EXAMPLES = [
-  "What are the most efficient types of solar panels?",
-  "Is this a good address for Solar Panels? 1900 Reston Metro Plaza, Reston, VA 20190",
-  "Is it more beneficial to install solar panels at X or at Y?"
-]
-
-
 def example_row():
   is_mobile = me.viewport_size().width < 640
   with me.box(
@@ -77,7 +79,7 @@ def example_row():
       margin=me.Margin(bottom=36),
     )
   ):
-    for example in EXAMPLES:
+    for example in PROMPT_EXAMPLES:
       example_box(example, is_mobile)
 
 
@@ -170,36 +172,34 @@ def click_send(e: me.ClickEvent):
 
 
 def call_api(input, first_input):
-  apigee_key = os.environ.get("APIGEE_KEY")
-  apigee_domain = os.environ.get("APIGEE_DOMAIN")
   if not first_input:
     yield "\n\n"
-  yield "Human: " + input
+  yield "Human: "+input
 
-  session_id = "201"
-  url = "https://"+apigee_domain+"/v1/solar-agent/run?session="+session_id
+  url = "https://"+APIGEE_DOMAIN+"/v1/solar-agent/run?session="+SESSION_ID
   headers = {
     "Content-Type": "application/json",
-    "x-api-key": apigee_key
+    "x-api-key": APIGEE_KEY
   }
   data = {"question": input}
-  print(url)
+
   try:
     response = requests.post(url, headers=headers, json=data)
-    print(response)
+    resp_data = response.json()
     resp_status_code = response.status_code
+
+    yield "\n\n"
     if resp_status_code == 200:
-      resp_data = response.json()
-      print(resp_data)
       answer=resp_data["answer"]
-      yield "\n\nAI Agent: " + answer
+      yield "AI Agent: " + answer
     elif resp_status_code == 422:
-      yield "\n\nPlease do not upload personal information."
+      yield "Your prompt appears to contain either personal information or inappropriate content. \
+        Please rephrase your question and try again."
     else:
-      yield "\n\nThere was an issue responding, try asking your question a different way."
+      yield "There was an issue responding, try asking your question a different way."
   except Exception as e:
     print(e)
-    yield "\n\nUnknown error occured, please try again."
+    yield "Unknown error occured, please try again."
 
 def output():
   state = me.state(State)

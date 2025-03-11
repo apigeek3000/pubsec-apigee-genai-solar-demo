@@ -27,9 +27,9 @@
                   title="Apigee GenAI Solar Agent"
                   environment="web"
                   feedback-link="https://github.com/apigeek3000/pubsec-apigee-genai-solar-demo/issues">
-    
-      <google-codelab-step label="Introduction" duration="0">
-        <p class="image-container"><img style="width: 624.00px" src="img/4ca5c63277f7d968.png"></p>
+    <google-codelab-step label="Introduction" duration="0">
+
+<p class="image-container"><img style="width: 624.00px" src="img/4ca5c63277f7d968.png"></p>
 <p><strong>Last Updated: </strong>2024-03-15</p>
 <h2 is-upgraded><strong>Overview</strong></h2>
 <p>In this lab we are going to use the <strong>Apigee API Platform</strong> to first design and publish an API to an example backend service (in this case the Google Maps Solar API), and then use the new <strong>Tools</strong> feature in <strong>Vertex Conversations</strong> to let users utilize this API in their LLM conversations. And finally we&#39;re going to publish a custom LLM model through our API, bringing security and ecosystem access to our Gen AI models and features.</p>
@@ -52,9 +52,11 @@
 <li>You could also connect ChatGPT to your API as well using the same mechanism (not covered in this lab). It&#39;s a multi-model world, so let&#39;s be prepared for it!</li>
 </ul>
 <p>Here&#39;s an overview of the architecture that we will build in this lab:</p>
+<!-- UPDATE IMAGE HERE -->
 <p class="image-container"><img style="width: 680.35px" src="img/3048eb22e5985d8.png"></p>
 <p>The boxes in gray above are not covered in this lab, but can be easily explored as add-ons using the Apigee &amp; Cloud Armor documentation.</p>
 <h2 class="checklist" is-upgraded><strong>What you&#39;ll learn</strong></h2>
+<!-- UPDATE TO EMPHASIZE NEW SECURITY STUFF -->
 <ul class="checklist">
 <li>How Apigee is used to integrate existing services into LLM ecosystems such as Vertex AI Conversations using Gemini Pro.</li>
 <li>How to configure Apigee to secure and make both existing and new Gen AI models &amp; services  available to clients.</li>
@@ -67,11 +69,10 @@
 <li>Some familiarity with running Linux shell commands (beginner level)</li>
 </ul>
 
+    </google-codelab-step>
+    <google-codelab-step label="Getting set up" duration="5">
 
-      </google-codelab-step>
-    
-      <google-codelab-step label="Getting set up" duration="5">
-        <h2 is-upgraded><strong>Log in to the Apigee console</strong></h2>
+<h2 is-upgraded><strong>Log in to the Apigee console</strong></h2>
 <p>To start, log in to your instance of Apigee using your Google Cloud credentials.</p>
 <p><a href="https://console.cloud.google.com/apigee/overview" target="_blank"><paper-button class="colored" raised>Open the Apigee console</paper-button></a></p>
 <aside class="special"><p><strong>Note:</strong> You need a provisioned Apigee project, either from your Qwiklabs, a Google Cloud trial, or Google Cloud paid account.</p>
@@ -112,11 +113,10 @@ cd pubsec-apigee-genai-solar-demo</code></pre>
 <p class="image-container"><img style="width: 684.50px" src="img/338cdd823d53a1c0.png"></p>
 <p>Keep the key handy for the next steps in the lab.</p>
 
+    </google-codelab-step>
+    <google-codelab-step label="Deploy Apigee assets" duration="20">
 
-      </google-codelab-step>
-    
-      <google-codelab-step label="Deploy Apigee assets" duration="20">
-        <h2 is-upgraded><strong>Set up your environment</strong></h2>
+<h2 is-upgraded><strong>Set up your environment</strong></h2>
 <p>We need to automate the deployment of our demo assets, and so will be using the <a href="https://cloud.google.com/sdk/docs/install" target="_blank">gcloud CLI</a> to deploy a lot of our assets. Make sure <strong>gcloud</strong> is installed (installed by default in Cloud Shell).</p>
 <p>Now we need to set our environment information for further automation commands. Let&#39;s make a copy of the environment file 1_env.sh, edit with our own environment information, and then source it in our shell. </p>
 <pre><code>cp 1_env.sh 1_env.dev.sh</code></pre>
@@ -128,22 +128,26 @@ export APIGEE_ENVIRONMENT=YOUR ENVIRONMENT</code></pre>
 <pre><code>source 1_env.dev.sh</code></pre>
 <p>Now also set the project in gcloud.</p>
 <pre><code>gcloud config set project $PROJECT</code></pre>
+<!-- UPDATE API ENABLING HERE -->
 <p>Also enable Vertex AI and the Google Maps Geocoding API  in our project using gcloud. </p>
 <pre><code>gcloud services enable aiplatform.googleapis.com
 gcloud services enable solar.googleapis.com 
 gcloud services enable geocoding-backend.googleapis.com</code></pre>
 <h2 is-upgraded><strong>Create a service account</strong></h2>
+<!-- UPDATE SA DESCRIPTION -->
 <p>A service account in Google Cloud is used to authorize service-to-service communication, and is a great way to enforce authorization without storing keys anywhere (using <a href="https://cloud.google.com/docs/authentication/provide-credentials-adc" target="_blank">default application credentials</a>).</p>
 <p>Let&#39;s create a service account for any service-to-service communication in this demo.</p>
 <pre><code>gcloud iam service-accounts create solarservice \
     --description=&#34;Solar service account&#34; \
     --display-name=&#34;Solar service&#34;</code></pre>
 <p>Now give the account the role access to use the Gemini Pro model. This will allow our API (which will use this service account) to access Vertex AI models such as Gemini Pro. If prompted, specify None as a policy condition.</p>
+<!-- UPDATE SA ROLES -->
 <pre><code>gcloud projects add-iam-policy-binding $PROJECT \
 --member=&#34;serviceAccount:solarservice@$PROJECT.iam.gserviceaccount.com&#34; \
 --role=&#34;roles/aiplatform.user&#34;
 </code></pre>
 <h2 is-upgraded>Storing keys</h2>
+<!-- ANY NEW KVMS? -->
 <p>In order to deploy an Apigee proxy that can use the Google Maps Solar API, we need a secure place to store our Google Maps API key. For that we are going to create an <a href="https://cloud.google.com/apigee/docs/api-platform/cache/key-value-maps" target="_blank">Apigee KeyValueMap (KVM)</a>, where we can encrypt and store any data needed at runtime, such as API keys.</p>
 <p>First we will create a KVM object in Apigee where we can store and access our keys. We will use <strong>apigeecli </strong>to create it by running this command.</p>
 <pre><code>apigeecli kvms create -e $APIGEE_ENVIRONMENT -n solar-keys -o $PROJECT -t $(gcloud auth print-access-token)</code></pre>
@@ -188,11 +192,14 @@ apigeecli kvms entries create -m solar-keys -k gmaps_key -l $GMAPS_KEY -e $APIGE
 <p class="image-container"><img style="width: 1261.00px" src="img/6649180b0c2dc4ea.png"></p>
 <p>The <strong>OVERVIEW</strong> page contains information about the current version and in which environments it&#39;s deployed (we just deployed a version to the eval environment).</p>
 <p>Click on the <strong>DEVELOP</strong> tab to open up the detailed proxy flow configuration.</p>
-<p class="image-container"><img style="width: 649.74px" src="img/7437933215de6d85.png"></p>
+<!-- UPDATE THIS IMAGE -->
+<p class="image-container"><img style="width: 649.74px" src="img/7437933215de6d85.png"></p> 
 <p>Here you can see all of the policies used to secure and mediate the logic behind this API proxy.</p>
 <p>Click on the <strong>Proxy endpoints &gt; default</strong> in the left menu about half-way down.</p>
 <p>This shows the flow that is executed when a user calls the default endpoint (/v1/solar-service).</p>
+<!-- UPDATE THIS IMAGE -->
 <p class="image-container"><img style="width: 650.39px" src="img/aab336a0cb493376.png"></p>
+<!-- UPDATE THIS DESCRIPTION -->
 <p>First, we are verifying the user&#39;s API key, then applying a request quota,then removing that key from the further traffic, getting and validating the inputs, and retrieving our <strong>Google Maps API key</strong> from the KVM that we set earlier.</p>
 <p>Then there is an optional <strong>GetGeoLocation</strong> flow that is run if the user sent a text address, and which converts it into latitude and longitude coordinates using the maps geolocation API.</p>
 <p>After that the request goes to a <strong>Target</strong> (which is either the <strong>Google Maps Solar API</strong> or the <strong>Gemini API</strong>) and then on the <strong>Response</strong> side for each target we have some steps to convert and format the data. There is even a small Javascript script to do some solar financial calculations that normally a domain service would do, but which we are simulating in our API proxy for the purpose of this lab.</p>
@@ -207,6 +214,7 @@ apigeecli kvms entries create -m solar-keys -k gmaps_key -l $GMAPS_KEY -e $APIGE
 <p>First, set your copied URL as an environment variable.</p>
 <pre><code>URL=your copied URL from above
 </code></pre>
+<!-- UPDATE TO US ADDRESS -->
 <p>And then try to call the URL with any street address (below is the address of the Google office in Berlin, Germany, but you can try any address you like).</p>
 <pre><code>curl -X POST &#34;$URL&#34; -i \
 -H &#34;Content-Type: application/json&#34; \
@@ -251,6 +259,7 @@ apigeecli apps create --name &#34;$APP_NAME&#34; \
 <pre><code>API_KEY=&#34;replace with consumerKey field from last command&#34;
 </code></pre>
 <p>Then retry the call to our endpoint, this time with our API key in the header of the request.</p>
+<!-- UPDATE WITH US ADDRESS -->
 <pre><code>curl -X POST &#34;$URL&#34; -i \
 -H &#34;Content-Type: application/json&#34; \
 -H &#34;x-api-key: $API_KEY&#34; \
@@ -262,6 +271,7 @@ apigeecli apps create --name &#34;$APP_NAME&#34; \
 EOF
 </code></pre>
 <p>Now you should see a real response from our API.</p>
+<!-- UPDATE THE RESPONSE -->
 <pre><code>      {
         &#34;address&#34;: &#34;Tucholskystr 2, 10117 Berlin&#34;,
         &#34;latitude&#34;: &#34;52.5218289697085&#34;,
@@ -279,16 +289,15 @@ EOF
 </code></pre>
 <p>Congratulations, you now have a fully functional solar power calculation API deployed in your Apigee environment!</p>
 
+    </google-codelab-step>
+    <google-codelab-step label="Configure Vertex Agent Builder" duration="15">
 
-      </google-codelab-step>
-    
-      <google-codelab-step label="Configure Vertex Agent Builder" duration="15">
-        <h2 is-upgraded>Configure the Open API spec</h2>
+<h2 is-upgraded>Configure the Open API spec</h2>
 <p>We will now be using Vertex Agent Builder to use an LLM (<strong>gemini-pro</strong> in this case) to automatically connect and interact with our API. This will be done using the Open API spec that is in the repository.</p>
 <p>But first we need to replace the server URL with our newly deployed proxy. </p>
 <p>Click on the <strong>pencil icon</strong> in the Cloud Shell header to open the code editor.</p>
 <p class="image-container"><img style="width: 665.50px" src="img/aaa24328346d2703.png"></p>
-<p>Then click on the <strong>hamburger three-lined menu</strong> in the upper left corner, go to the <strong>File &gt; Open folder</strong> option, and then select the directory that you cloned (<strong>apigee-genai-solar-demo</strong>).</p>
+<p>Then click on the <strong>hamburger three-lined menu</strong> in the upper left corner, go to the <strong>File &gt; Open folder</strong> option, and then select the directory that you cloned (<strong>pubsec-apigee-genai-solar-demo</strong>).</p>
 <p class="image-container"><img style="width: 679.25px" src="img/ed46c1dd31a997c.png"></p>
 <p>Now open the file <strong>api-specs/solar-api-v1.yaml</strong> in the editor, and replace the <strong>servers - url </strong>value with the base URL that you copied in the second above from the <strong>Trace</strong> window. Paste that value as the value in the yaml file as the <strong>url: </strong>- without the /solar-service path.</p>
 <p class="image-container"><img style="width: 683.50px" src="img/a8af7c359f2c69fa.png"></p>
@@ -299,6 +308,7 @@ EOF
 <p>In case the service isn&#39;t enabled, click on <strong>CONTINUE</strong> to activate the API and continue to the app.</p>
 <p>You should see a menu of different types of apps to create, click on the last option <strong>Agent</strong>.</p>
 <p class="image-container"><img style="width: 677.50px" src="img/12e12aa5f4376332.png"></p>
+<!-- UPDATE CONVERSATION AGENT DESCRIPTION? -->
 <p>Give your app a name like <strong>Solar-AI-App</strong>, select a region like <strong>us-central1</strong>, and click <strong>AGREE &amp; CREATE</strong>.</p>
 <p>After a bit your app will be created, then click on <strong>Tools</strong> in the left menu, and click on <strong>+ Create</strong> to create a new tool. The tool will be the link to our API.</p>
 <p>Give the tool the name <strong>SolarService</strong>, select <strong>OpenAPI</strong> as <strong>Type</strong>, paste in <strong>Provides solar estimation services for a given address</strong> in <strong>Description</strong>, and paste the <strong>Open API spec</strong> from the previous section (where we replaced the server url) into the <strong>Schema</strong> box. </p>
@@ -343,7 +353,10 @@ EOF
 </code></pre>
 <p>If you ask the model an unrelated question, such as &#34;why is the sky blue,&#34; the model shouldn&#39;t answer that question because of our prompt tuning in the API.</p>
 <p>Here we have an API endpoint in Apigee offering both backend service (Solar API) and Gen AI model (Gemini Pro) features to users with unified authentication &amp; authorization, traffic management, and analytics. Take some time to <a href="https://cloud.google.com/apigee/resources" target="_blank">explore further guides</a> on adding more features to your APIs.</p>
+<!-- DEPLOY SOLAR AGENT APIGEE API -->
+<!-- DEPLOY & TEST DEVELOPER PORTAL -->
 <p><strong>Deploy web test site</strong></p>
+<!-- UPDATE WITH MESOP INSTRUCTIONS -->
 <p>As a last step, let&#39;s deploy a test web site that uses our Vertex AI Conversations bot.</p>
 <p>In the cloud shell editor, open the following files in the cloned project folder <strong>public/index-edu.html</strong> and <strong>public/index-state.html</strong> and find the snippet at the bottom with code containing <strong>&lt;!-- BEGIN DIALOGFLOW SNIPPET –&gt;</strong>. We&#39;re going to replace this with your own conversation bot code.</p>
 <p class="image-container"><img style="width: 686.79px" src="img/eaec0fc04df6b533.png"></p>
@@ -358,10 +371,11 @@ EOF
 <p>Try asking solar questions and about the potential for solar panels on different addresses, and observe how the app uses our API.</p>
 <p class="image-container"><img style="width: 656.50px" src="img/d87988ce81eba424.png"></p>
 <p>To review, we deployed <strong>Apigee APIs</strong> to the <strong>Google Maps Solar API,</strong> a <strong>Gemini Pro</strong> model, and the <strong>Vertex AI Conversations</strong> app that provided API &amp; LLM-powered features to users. </p>
-      </google-codelab-step>
     
-      <google-codelab-step label="Congratulations!" duration="0">
-        <p>Congratulations, you&#39;ve successfully published your Solar API with backend and LLM integration on Apigee, and connected your first LLM app with Vertex AI Conversations. Check out these additional resources on adding more features to your API, and connect with the Apigee team in the <a href="https://www.googlecloudcommunity.com/gc/Apigee/bd-p/cloud-apigee" target="_blank">Apigee Community</a> below for more resources &amp; use-cases.</p>
+    </google-codelab-step>
+    <google-codelab-step label="Congratulations!" duration="0">
+
+<p>Congratulations, you&#39;ve successfully published your Solar API with backend and LLM integration on Apigee, and connected your first LLM app with Vertex AI Conversations. Check out these additional resources on adding more features to your API, and connect with the Apigee team in the <a href="https://www.googlecloudcommunity.com/gc/Apigee/bd-p/cloud-apigee" target="_blank">Apigee Community</a> below for more resources &amp; use-cases.</p>
 <h2 is-upgraded><strong>What&#39;s next?</strong></h2>
 <p>Check out some of these further resources</p>
 <ul>
@@ -372,9 +386,7 @@ EOF
 <li><a href="https://www.googlecloudcommunity.com/gc/Apigee/bd-p/cloud-apigee" target="_blank">Apigee Community</a></li>
 </ul>
 
-
-      </google-codelab-step>
-    
+    </google-codelab-step>
   </google-codelab>
 
   <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
