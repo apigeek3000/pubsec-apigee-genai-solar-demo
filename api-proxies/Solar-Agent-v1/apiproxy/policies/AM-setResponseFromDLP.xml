@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage continueOnError="false" enabled="true" name="AM-setResponseFromDLP">
+  <DisplayName>AM-setResponseFromDLP</DisplayName>
+  <Properties/>
+  <Set>
+    <Payload contentType="application/json">{"total_request_time":{totalLatency},"answer": "{escapeJSON(dlpResponse)}"}</Payload>
+  </Set>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <AssignTo createNew="false" transport="http" type="response"/>
+</AssignMessage>

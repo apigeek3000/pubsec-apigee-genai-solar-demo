@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SharedFlowBundle revision="1" name="semantic-cache-response-v1">
+  <DisplayName/>
+  <Description/>
+  <CreatedAt>1736283183044</CreatedAt>
+  <LastModifiedAt>1736283183044</LastModifiedAt>
+  <Policies>
+    <Policy>AM-SetCachedLLMResponse</Policy>
+    <Policy>JS-CalculateExpTime</Policy>
+    <Policy>PC-PopulateLLMCache</Policy>
+    <Policy>SC-UpsertIndex</Policy>
+  </Policies>
+  <Resources>
+    <Resource>jsc://CalculateExpTime.js</Resource>
+  </Resources>
+  <SharedFlows>
+    <SharedFlow>default</SharedFlow>
+  </SharedFlows>
+  <subType>SharedFlow</subType>
+</SharedFlowBundle>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SharedFlow name="default">
+  <Step>
+    <Name>AM-setModelArmorParam</Name>
+  </Step>
+  <Step>
+    <Name>SC-sanitizePrompt</Name>
+  </Step>
+  <Step>
+    <Name>JS-formatModelArmorResult</Name>
+  </Step>
+</SharedFlow>

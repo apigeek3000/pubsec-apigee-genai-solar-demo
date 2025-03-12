@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SpikeArrest continueOnError="false" enabled="true" name="SA-rateLimit">
+  <DisplayName>SA-rateLimit</DisplayName>
+  <Properties/>
+  <Identifier ref="request.header.x-api-key"/>
+  <Rate>30ps</Rate>
+</SpikeArrest>

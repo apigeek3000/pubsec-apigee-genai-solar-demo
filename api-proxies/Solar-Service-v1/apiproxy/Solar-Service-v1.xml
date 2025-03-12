@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="3" name="Solar-Service-v1">
+<APIProxy revision="7" name="Solar-Service-v1">
   <DisplayName/>
   <Description>This API provides solar calculations services for any address or lat/long input.</Description>
-  <CreatedAt>1725857226631</CreatedAt>
-  <LastModifiedAt>1728302413161</LastModifiedAt>
+  <CreatedAt>1736721996004</CreatedAt>
+  <LastModifiedAt>1736721996004</LastModifiedAt>
   <BasePaths>/v1/solar-service</BasePaths>
   <Policies>
-    <Policy>EV-GetSolarResults</Policy>
     <Policy>RF-ValidateInputs</Policy>
-    <Policy>AM-SetGeminiData</Policy>
-    <Policy>AM-SetResponse</Policy>
-    <Policy>EV-GetGeolocationResults</Policy>
-    <Policy>SC-GetGeolocation</Policy>
-    <Policy>VA-VerifyKey</Policy>
-    <Policy>KVM-GetMapsKey</Policy>
     <Policy>AM-RemoveKey</Policy>
-    <Policy>JS-SetGeminiResponse</Policy>
-    <Policy>EV-GetInputs</Policy>
-    <Policy>JS-CalculateSolarData</Policy>
+    <Policy>EV-GetGeolocationResults</Policy>
     <Policy>AM-SetTargetData</Policy>
+    <Policy>KVM-GetMapsKey</Policy>
+    <Policy>JS-SetGeminiResponse</Policy>
+    <Policy>AM-SetResponse</Policy>
+    <Policy>VA-VerifyKey</Policy>
+    <Policy>EV-GetSolarResults</Policy>
+    <Policy>JS-CalculateSolarData</Policy>
+    <Policy>EV-GetInputs</Policy>
+    <Policy>SC-GetGeolocation</Policy>
+    <Policy>RF-raiseFault404</Policy>
+    <Policy>SA-rateLimit</Policy>
+    <Policy>OAS-checkSpec</Policy>
+    <Policy>Q-checkQuota</Policy>
+    <Policy>SC-anonymiseResponseDLP</Policy>
+    <Policy>EV-extractAnswer</Policy>
+    <Policy>AM-setResponseFromDLP</Policy>
+    <Policy>EV-extractDLPResponse</Policy>
+    <Policy>ML-sendLogsCloudLogging</Policy>
+    <Policy>EV-extractPrompt</Policy>
+    <Policy>AM-setParam</Policy>
     <Policy>CORS-Enable</Policy>
-    <Policy>Q-EnforceQuota</Policy>
   </Policies>
   <ProxyEndpoints>
     <ProxyEndpoint>default</ProxyEndpoint>
@@ -28,6 +37,7 @@
   <Resources>
     <Resource>jsc://solar-calculator.js</Resource>
     <Resource>jsc://gemini-functions.js</Resource>
+    <Resource>oas://solar-api-v1.yaml</Resource>
   </Resources>
   <TargetEndpoints>
     <TargetEndpoint>GeminiAPI</TargetEndpoint>

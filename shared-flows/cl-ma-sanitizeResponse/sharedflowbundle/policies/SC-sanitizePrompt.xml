@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ServiceCallout continueOnError="false" enabled="true" name="SC-sanitizePrompt">
+  <DisplayName>SC-sanitizePrompt</DisplayName>
+  <Properties/>
+  <Request clearPayload="true" variable="myRequest">
+    <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+    <Set>
+      <Verb>POST</Verb>
+      <Headers>
+        <Header name="Content-Type">application/json</Header>
+        <Header name="x-goog-user-project">{organization.name}</Header>
+      </Headers>
+      <Payload contentType="application/json">
+          { "model_response_data": 
+            { 
+              "text": "{dlpContent}"
+            } 
+          }
+      </Payload>
+    </Set>
+  </Request>
+  <Response>maResponse</Response>
+  <HTTPTargetConnection>
+    <Properties/>
+    <URL>https://modelarmor.{model-armor-location}.rep.googleapis.com/v1alpha/projects/{model-armor-project}/locations/{model-armor-location}/templates/{model-armor-template}:sanitizeModelResponse</URL>
+    <Authentication>
+      <GoogleAccessToken>
+        <Scopes>
+          <Scope>https://www.googleapis.com/auth/cloud-platform</Scope>
+        </Scopes>
+      </GoogleAccessToken>
+    </Authentication>
+  </HTTPTargetConnection>
+</ServiceCallout>

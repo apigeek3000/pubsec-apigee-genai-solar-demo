@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage continueOnError="false" enabled="true" name="AM-setPromptContent2">
+  <DisplayName>AM-setPromptContent2</DisplayName>
+  <Properties/>
+  <AssignVariable>
+    <Name>prompt_contents</Name>
+    <Value>Why the sky is blue</Value>
+  </AssignVariable>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SharedFlowBundle revision="1" name="cl-dataLossPrevention">
+  <DisplayName/>
+  <Description/>
+  <CreatedAt>1736283268182</CreatedAt>
+  <LastModifiedAt>1736283268182</LastModifiedAt>
+  <Policies>
+    <Policy>SC-anonymiseResponseDLP</Policy>
+    <Policy>EV-extractDLPResponse</Policy>
+  </Policies>
+  <SharedFlows>
+    <SharedFlow>default</SharedFlow>
+  </SharedFlows>
+  <subType>SharedFlow</subType>
+</SharedFlowBundle>

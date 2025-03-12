@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SharedFlowBundle revision="2" name="cl-modelArmor">
+  <DisplayName/>
+  <Description/>
+  <CreatedAt>1736724608103</CreatedAt>
+  <LastModifiedAt>1736724608103</LastModifiedAt>
+  <Policies>
+    <Policy>SC-sanitizePrompt</Policy>
+    <Policy>AM-setModelArmorParam</Policy>
+    <Policy>JS-formatModelArmorResult</Policy>
+  </Policies>
+  <Resources>
+    <Resource>jsc://formatModelArmorResult.js</Resource>
+  </Resources>
+  <SharedFlows>
+    <SharedFlow>default</SharedFlow>
+  </SharedFlows>
+  <subType>SharedFlow</subType>
+</SharedFlowBundle>

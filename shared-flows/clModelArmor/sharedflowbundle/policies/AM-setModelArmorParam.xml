@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage continueOnError="false" enabled="true" name="AM-setModelArmorParam">
+  <DisplayName>AM-setModelArmorParam</DisplayName>
+  <Properties/>
+  <AssignVariable>
+    <Name>model-armor-project</Name>
+    <Value>example-project</Value>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>model-armor-location</Name>
+    <Value>us-central1</Value>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>model-armor-template</Name>
+    <Value>apigee_template</Value>
+  </AssignVariable>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

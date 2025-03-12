@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+  <Description/>
+  <FaultRules/>
+  <PreFlow name="PreFlow">
+    <Request>
+      <Step>
+        <Name>CORS-Enable</Name>
+      </Step>
+      <Step>
+        <Name>VA-VerifyKey</Name>
+      </Step>
+      <Step>
+        <Name>SA-rateLimit</Name>
+      </Step>
+      <Step>
+        <Name>OAS-checkSpec</Name>
+      </Step>
+    </Request>
+    <Response>
+      <Step>
+        <Name>JS-getLogData</Name>
+      </Step>
+    </Response>
+  </PreFlow>
+  <PostFlow name="PostFlow">
+    <Request/>
+    <Response>
+    </Response>
+  </PostFlow>
+  <PostClientFlow name="PostClientFlow">
+    <Response>
+      <Step>
+        <Name>ML-sendLogsCloudLogging</Name>
+      </Step>
+    </Response>
+  </PostClientFlow>
+  <Flows>
+    <Flow name="Agent">
+      <Description/>
+      <Request>
+        <Step>
+          <Name>EV-extractPrompt</Name>
+        </Step>
+        <Step>
+          <Condition>(prompt == null)</Condition>
+          <Name>RF-ValidateInputs</Name>
+        </Step>
+        <Step>
+          <Name>FC-getTokenNumber</Name>
+        </Step>
+        <Step>
+          <Name>AM-setMintVariable</Name>
+        </Step>
+        <Step>
+          <Name>DC-captureTokenNumber</Name>
+        </Step>
+        <Step>
+          <Name>RF-raiseFault413</Name>
+          <Condition>(totalTokens &gt; verifyapikey.VA-VerifyKey.apiproduct.maxTokens)</Condition>
+        </Step>
+        <Step>
+          <Name>Q-TokenQuotaCounter</Name>
+        </Step>
+        <Step>
+          <Name>FC-maSanitize</Name>
+        </Step>
+        <Step>
+          <Name>RF-raiseFault422</Name>
+          <Condition>(modeleArmor_error != "none")</Condition>
+        </Step>
+        <Step>
+          <Name>FC-SemanticCacheRequest</Name>
+          <Condition>(propertyset.vertex_config.use_cache = "true")</Condition>
+        </Step>
+      </Request>
+      <Response>
+        <Step>
+          <Name>AM-setResponseFromCache</Name>
+          <Condition>(lookupcache.LC-LookupDatapoint.cachehit = true)</Condition>
+        </Step>
+        <Step>
+          <Name>EV-extractAnswer</Name>
+        </Step>
+        <Step>
+          <Name>FC-maAnonymize</Name>
+        </Step>
+        <Step>
+          <Name>AM-setResponseFromDLP</Name>
+        </Step>
+      </Response>
+      <Condition>request.verb = "POST" AND proxy.pathsuffix MatchesPath "/run" </Condition>
+    </Flow>
+    <Flow name="unknown-path-suffix">
+      <Request>
+        <Step>
+          <Name>RF-raiseFault404</Name>
+        </Step>
+      </Request>
+    </Flow>
+  </Flows>
+  <HTTPProxyConnection>
+    <BasePath>/v1/solar-agent</BasePath>
+    <Properties/>
+    <VirtualHost>default</VirtualHost>
+  </HTTPProxyConnection>
+  <RouteRule name="default">
+    <Condition>(request.verb != "OPTIONS") and (lookupcache.LC-LookupDatapoint.cachehit != true)</Condition>
+    <TargetEndpoint>VertexAgentAPI</TargetEndpoint>
+  </RouteRule>
+  <RouteRule name="noroute"/>
+</ProxyEndpoint>

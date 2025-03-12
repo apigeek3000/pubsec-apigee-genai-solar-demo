@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage continueOnError="false" enabled="true" name="AM-SetTargetData">
+  <DisplayName>AM-SetTargetData</DisplayName>
+  <Properties/>
+  <Set>
+    <Headers>
+      <Header name="x-goog-user-project">example-gcp-project</Header>
+      <Header name="Content-Type">application/json; charset=utf-8</Header>
+    </Headers>
+    <Payload contentType="application/json">
+      {"queryInput":{"text":{"text":"{escapeJSON(prompt)}"}, "languageCode":"en"}, "queryParams":{} }
+    </Payload>
+  </Set>
+  <AssignVariable>
+    <Name>target.copy.pathsuffix</Name>
+    <Value>false</Value>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>agent.region</Name>
+    <Value>us-central1</Value>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>session-key</Name>
+    <Ref>request.queryparam.session</Ref>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>agent.id</Name>
+    <Value>c8fc5652-4818-40c8-ae2e-7c3e8b5d2083</Value>
+  </AssignVariable>
+  <Remove>
+    <QueryParams>
+      <QueryParam name="session"/>
+    </QueryParams>
+  </Remove>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

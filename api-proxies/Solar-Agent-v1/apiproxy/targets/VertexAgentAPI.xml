@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TargetEndpoint name="GeminiAPI">
+<TargetEndpoint name="VertexAgentAPI">
   <Description/>
   <FaultRules/>
   <PreFlow name="PreFlow">
     <Request>
       <Step>
-        <Name>AM-setParam</Name>
+        <Name>AM-SetTargetData</Name>
       </Step>
     </Request>
-    <Response/>
+    <Response>
+      <Step>
+        <Name>FC-SemanticCacheResponse</Name>
+        <Condition>(propertyset.vertex_config.use_cache = "true")</Condition>
+      </Step>
+    </Response>
   </PreFlow>
   <PostFlow name="PostFlow">
     <Request/>
     <Response>
-      <Step>
-        <Name>JS-SetGeminiResponse</Name>
-      </Step>
     </Response>
   </PostFlow>
   <Flows/>
   <HTTPTargetConnection>
     <Properties/>
-    <URL>https://europe-west1-aiplatform.googleapis.com/v1/projects/{organization.name}/locations/europe-west1/publishers/google/models/gemini-1.0-pro:streamGenerateContent</URL>
+    <URL>https://{agent.region}-dialogflow.googleapis.com/v3/projects/{organization.name}/locations/{agent.region}/agents/{agent.id}/sessions/{session-key}:detectIntent</URL>
     <Authentication>
       <GoogleAccessToken>
         <Scopes>

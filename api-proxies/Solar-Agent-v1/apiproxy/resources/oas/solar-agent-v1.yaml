@@ -1,0 +1,67 @@
+openapi: 3.0.0
+info:
+  title: Solar Panel Estimation API
+  contact:
+    name: Apigee Devrel
+    url: https://github.com/apigee/devrel
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  description: This API lets users get solar panel energy and cost estimations based on their address. Try API with our chat application in [GenAI Solar page](https://bap-emea-apigee-5-cltest.apigee.io/prompt).
+  version: 1.0.0
+tags:
+  - name: Solar
+    description: Operations to query Solar Panel Agent
+servers:
+  - url: https://example-api.nip.io/v1/solar-agent
+security:
+  - ApiKeyAuth: []
+paths:
+  /run:
+    post:
+      operationId: answerSolarQuestion
+      description: Answers general questions about solar energy.
+      tags:
+        - Solar
+      parameters:
+        - in: query
+          name: session
+          schema:
+            type: string
+          required: true
+          description: The name of the session this query is sent to
+      requestBody:
+        description: A question about solar energy.
+        content:
+          application/json:
+            schema:
+              type: object
+              description: The question about solar energy sent to the agent.
+              properties:
+                question:
+                  description: The question text
+                  type: string
+                  example: What are the most efficient types of solar panels?
+              example: { "question": "Is it beneficial to install solar panels at 8 rue de Londres, Paris?"}
+      responses:
+        '200':
+          description: Successfully retrieved answer to the solar energy question.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: The answer to the solar energy question.
+                properties:
+                  answer:
+                    description: The answer text to the solar energy question.
+                    type: string
+                    example: The most efficient solar panels are MVP solar panels.
+                example: { "answer": "The solar potential is good at 8 rue de Londres, Paris. The max array area is 323.98654 m2, the max array panel count is 165, and the max sunshine hours per year is 1124.6481."}
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: x-api-key
+      in: header
+ 
+  

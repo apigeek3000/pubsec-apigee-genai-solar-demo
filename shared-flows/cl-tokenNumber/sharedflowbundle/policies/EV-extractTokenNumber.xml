@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables continueOnError="false" enabled="true" name="EV-extractTokenNumber">
+  <DisplayName>EV-extractTokenNumber</DisplayName>
+  <Properties/>
+  <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+  <JSONPayload>
+    <Variable name="totalTokens">
+      <JSONPath>$.totalTokens</JSONPath>
+    </Variable>
+  </JSONPayload>
+  <Source clearPayload="false">TokenNumberResponse</Source>
+  <VariablePrefix/>
+</ExtractVariables>

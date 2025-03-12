@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RaiseFault continueOnError="false" enabled="true" name="RF-raiseFault413">
+  <DisplayName>RF-raiseFault413</DisplayName>
+  <Properties/>
+  <FaultResponse>
+    <Set>
+      <Headers/>
+      <Payload contentType="text/plain">
+      </Payload>
+      <StatusCode>413</StatusCode>
+      <ReasonPhrase>Token limit exceeded ({apigee.totalTokens})</ReasonPhrase>
+      <Payload contentType="application/json">
+                {
+                    "error":"413.01.001",
+                    "msg": "Token limit exceeded ({totalTokens}/{verifyapikey.VA-VerifyKey.apiproduct.maxTokens})."
+                }
+      </Payload>
+    </Set>
+  </FaultResponse>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</RaiseFault>

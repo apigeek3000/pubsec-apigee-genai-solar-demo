@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ServiceCallout continueOnError="false" enabled="true" name="SC-getTokenNumber">
+  <DisplayName>SC-getTokenNumber</DisplayName>
+  <Properties/>
+  <Request clearPayload="true" variable="myRequest">
+    <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+    <Set>
+      <Verb>POST</Verb>
+      <Headers>
+        <Header name="Content-Type">application/json; charset=utf-8</Header>
+      </Headers>
+      <Payload contentType="application/json; charset=utf-8">
+          {
+            "contents": [
+              { 
+                "role": "USER", 
+                "parts": [
+                  {
+                    "text": "{escapeJSON(prompt)}"
+                  }
+                ]
+              }
+            ]
+          }
+      </Payload>
+    </Set>
+  </Request>
+  <Response>TokenNumberResponse</Response>
+  <HTTPTargetConnection>
+    <Properties/>
+    <URL>https://europe-west1-aiplatform.googleapis.com/v1/projects/{organization.name}/locations/europe-west1/publishers/google/models/gemini-1.0-pro:countTokens</URL>
+    <Authentication>
+      <GoogleAccessToken>
+        <Scopes>
+          <Scope>https://www.googleapis.com/auth/cloud-platform</Scope>
+        </Scopes>
+      </GoogleAccessToken>
+    </Authentication>
+  </HTTPTargetConnection>
+</ServiceCallout>

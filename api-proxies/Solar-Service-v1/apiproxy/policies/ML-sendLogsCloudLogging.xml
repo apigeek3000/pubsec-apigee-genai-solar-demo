@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<MessageLogging continueOnError="false" enabled="true" name="ML-sendLogsCloudLogging">
+  <DisplayName>ML-sendLogsCloudLogging</DisplayName>
+  <CloudLogging>
+    <LogName>projects/{organization.name}/logs/apigee</LogName>
+    <Message contentType="application/json">{
+        "organization": "{organization.name}",
+        "environment": "{environment.name}",
+        "proxy": "{apiproxy.name}",
+        "verb": "{request.verb}",
+        "request.content":"{escapeJSON(request.content)}",
+        "response.code":"{response.status.code}",
+        "response.reason":"{message.reason.phrase}",
+        "response.content":"{escapeJSON(message.content)}"
+    }</Message>
+  </CloudLogging>
+</MessageLogging>

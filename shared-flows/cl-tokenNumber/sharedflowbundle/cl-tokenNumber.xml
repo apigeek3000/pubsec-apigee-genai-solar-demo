@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SharedFlowBundle revision="1" name="cl-tokenNumber">
+  <DisplayName/>
+  <Description/>
+  <CreatedAt>1736283239171</CreatedAt>
+  <LastModifiedAt>1736283239171</LastModifiedAt>
+  <Policies>
+    <Policy>SC-getTokenNumber</Policy>
+    <Policy>EV-extractTokenNumber</Policy>
+  </Policies>
+  <SharedFlows>
+    <SharedFlow>default</SharedFlow>
+  </SharedFlows>
+  <subType>SharedFlow</subType>
+</SharedFlowBundle>

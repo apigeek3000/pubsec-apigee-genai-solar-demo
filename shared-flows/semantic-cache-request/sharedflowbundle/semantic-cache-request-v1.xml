@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SharedFlowBundle revision="1" name="semantic-cache-request-v1">
+  <DisplayName/>
+  <Description/>
+  <CreatedAt>1736283194818</CreatedAt>
+  <LastModifiedAt>1736283194818</LastModifiedAt>
+  <Policies>
+    <Policy>AM-NearestNeighbor</Policy>
+    <Policy>AM-SetPromptContents</Policy>
+    <Policy>Assert-NearestNeighborHit</Policy>
+    <Policy>EV-ExtractEmbeddings</Policy>
+    <Policy>EV-ExtractNearestNeighbor</Policy>
+    <Policy>EV-ExtractPromptContents</Policy>
+    <Policy>LC-LookupDatapoint</Policy>
+    <Policy>SC-GenerateEmbeddings</Policy>
+    <Policy>SC-QueryNearestNeighbor</Policy>
+    <Policy>AM-setPromptContent2</Policy>
+  </Policies>
+  <SharedFlows>
+    <SharedFlow>default</SharedFlow>
+  </SharedFlows>
+  <subType>SharedFlow</subType>
+</SharedFlowBundle>

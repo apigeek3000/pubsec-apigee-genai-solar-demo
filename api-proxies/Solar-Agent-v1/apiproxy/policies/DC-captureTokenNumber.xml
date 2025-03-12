@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DataCapture name="DC-captureTokenNumber" continueOnError="false" enabled="true">
+  <DisplayName>DC-captureTokenNumber</DisplayName>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <Capture>
+    <Collect ref="totalTokens" default="0"/>
+    <DataCollector>dc_tokenNumber</DataCollector>
+  </Capture>
+  <Capture>
+    <Collect ref="totalTokens" default="0"/>
+    <DataCollector scope="monetization">perUnitPriceMultiplier</DataCollector>
+  </Capture>
+  <Capture>
+    <Collect ref="transactionSuccess" default="true"/>
+    <DataCollector scope="monetization">transactionSuccess</DataCollector>
+  </Capture>
+  <Capture>
+    <Collect ref="currency" default="USD"/>
+    <DataCollector scope="monetization">currency</DataCollector>
+  </Capture>
+</DataCapture>

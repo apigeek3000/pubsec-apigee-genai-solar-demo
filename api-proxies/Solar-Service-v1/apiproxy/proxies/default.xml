@@ -11,7 +11,13 @@
         <Name>VA-VerifyKey</Name>
       </Step>
       <Step>
-        <Name>Q-EnforceQuota</Name>
+        <Name>SA-rateLimit</Name>
+      </Step>
+      <Step>
+        <Name>Q-checkQuota</Name>
+      </Step>
+      <Step>
+        <Name>OAS-checkSpec</Name>
       </Step>
       <Step>
         <Name>AM-RemoveKey</Name>
@@ -23,9 +29,6 @@
         <Condition>(apigee.latitude == null OR apigee.longitude == null) AND (apigee.address == null) AND (apigee.question == null)</Condition>
         <Name>RF-ValidateInputs</Name>
       </Step>
-      <Step>
-        <Name>KVM-GetMapsKey</Name>
-      </Step>
     </Request>
     <Response/>
   </PreFlow>
@@ -34,10 +37,20 @@
     <Response>
     </Response>
   </PostFlow>
+  <PostClientFlow name="PostClientFlow">
+    <Response>
+      <Step>
+        <Name>ML-sendLogsCloudLogging</Name>
+      </Step>
+    </Response>
+  </PostClientFlow>
   <Flows>
     <Flow name="GetGeoLocation">
       <Description/>
       <Request>
+        <Step>
+          <Name>KVM-GetMapsKey</Name>
+        </Step>
         <Step>
           <Name>SC-GetGeolocation</Name>
         </Step>
@@ -46,7 +59,37 @@
         </Step>
       </Request>
       <Response/>
-      <Condition>request.verb = "POST" AND apigee.address != null</Condition>
+      <Condition>request.verb = "POST" AND proxy.pathsuffix MatchesPath "/data" AND apigee.address != null</Condition>
+    </Flow>
+    <Flow name="Question">
+      <Description/>
+      <Request>
+        <Step>
+          <Name>EV-extractPrompt</Name>
+        </Step>
+      </Request>
+      <Response>
+        <Step>
+          <Name>EV-extractAnswer</Name>
+        </Step>
+        <Step>
+          <Name>SC-anonymiseResponseDLP</Name>
+        </Step>
+        <Step>
+          <Name>EV-extractDLPResponse</Name>
+        </Step>
+        <Step>
+          <Name>AM-setResponseFromDLP</Name>
+        </Step>
+      </Response>
+      <Condition>request.verb = "POST" AND proxy.pathsuffix MatchesPath "/question" </Condition>
+    </Flow>
+    <Flow name="unknown-path-suffix">
+      <Request>
+        <Step>
+          <Name>RF-raiseFault404</Name>
+        </Step>
+      </Request>
     </Flow>
   </Flows>
   <HTTPProxyConnection>
@@ -55,10 +98,12 @@
     <VirtualHost>default</VirtualHost>
   </HTTPProxyConnection>
   <RouteRule name="questions">
-    <Condition>proxy.pathsuffix MatchesPath "/questions"</Condition>
+    <Condition>(proxy.pathsuffix MatchesPath "/question") AND (request.verb != "OPTIONS")</Condition>
     <TargetEndpoint>GeminiAPI</TargetEndpoint>
   </RouteRule>
   <RouteRule name="default">
+    <Condition>(request.verb != "OPTIONS")</Condition>
     <TargetEndpoint>GoogleSolarAPI</TargetEndpoint>
   </RouteRule>
+  <RouteRule name="noroute"/>
 </ProxyEndpoint>

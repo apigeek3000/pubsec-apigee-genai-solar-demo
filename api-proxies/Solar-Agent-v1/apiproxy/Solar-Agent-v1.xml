@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="6" name="Solar-Agent-v1">
+  <DisplayName/>
+  <Description>This API provides solar calculations services for any address or lat/long input.</Description>
+  <CreatedAt>1736901348221</CreatedAt>
+  <LastModifiedAt>1736901348221</LastModifiedAt>
+  <BasePaths>/v1/solar-agent</BasePaths>
+  <Policies>
+    <Policy>RF-ValidateInputs</Policy>
+    <Policy>AM-SetTargetData</Policy>
+    <Policy>VA-VerifyKey</Policy>
+    <Policy>RF-raiseFault404</Policy>
+    <Policy>SA-rateLimit</Policy>
+    <Policy>OAS-checkSpec</Policy>
+    <Policy>RF-raiseFault413</Policy>
+    <Policy>Q-checkQuota</Policy>
+    <Policy>EV-extractAnswer</Policy>
+    <Policy>AM-setResponseFromDLP</Policy>
+    <Policy>ML-sendLogsCloudLogging</Policy>
+    <Policy>FC-maSanitize</Policy>
+    <Policy>EV-extractPrompt</Policy>
+    <Policy>RF-raiseFault422</Policy>
+    <Policy>DC-captureTokenNumber</Policy>
+    <Policy>FC-SemanticCacheRequest</Policy>
+    <Policy>FC-SemanticCacheResponse</Policy>
+    <Policy>AM-setResponseFromCache</Policy>
+    <Policy>FC-getTokenNumber</Policy>
+    <Policy>FC-dlpAnonymise</Policy>
+    <Policy>FC-maAnonymize</Policy>
+    <Policy>Q-TokenQuotaCounter</Policy>
+    <Policy>AM-setMintVariable</Policy>
+    <Policy>JS-getLogData</Policy>
+    <Policy>CORS-Enable</Policy>
+  </Policies>
+  <ProxyEndpoints>
+    <ProxyEndpoint>default</ProxyEndpoint>
+  </ProxyEndpoints>
+  <Resources>
+    <Resource>oas://solar-agent-v1.yaml</Resource>
+    <Resource>properties://vertex_config.properties</Resource>
+    <Resource>jsc://formatLog.js</Resource>
+  </Resources>
+  <TargetEndpoints>
+    <TargetEndpoint>VertexAgentAPI</TargetEndpoint>
+  </TargetEndpoints>
+</APIProxy>

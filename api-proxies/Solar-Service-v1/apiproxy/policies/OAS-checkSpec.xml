@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OASValidation continueOnError="false" enabled="true" name="OAS-checkSpec">
+  <DisplayName>OAS-checkSpec</DisplayName>
+  <Properties/>
+  <Source>request</Source>
+  <OASResource>oas://solar-api-v1.yaml</OASResource>
+</OASValidation>

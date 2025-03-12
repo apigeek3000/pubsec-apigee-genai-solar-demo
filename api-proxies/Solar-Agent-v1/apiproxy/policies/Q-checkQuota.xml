@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Quota continueOnError="false" enabled="true" name="Q-checkQuota" type="calendar">
+  <DisplayName>Q-checkQuota</DisplayName>
+  <Properties/>
+  <Interval ref="verifyapikey.VA-VerifyKey.apiproduct.developer.quota.interval">1</Interval>
+  <TimeUnit ref="verifyapikey.VA-VerifyKey.apiproduct.developer.quota.timeunit">hour</TimeUnit>
+  <Allow count="200" countRef="verifyapikey.VA-VerifyKey.apiproduct.developer.quota.limit"/>
+  <StartTime>2024-5-16 12:00:00</StartTime>
+  <Distributed>false</Distributed>
+  <Synchronous>false</Synchronous>
+  <AsynchronousConfiguration>
+    <SyncIntervalInSeconds>20</SyncIntervalInSeconds>
+    <SyncMessageCount>5</SyncMessageCount>
+  </AsynchronousConfiguration>
+  <Identifier ref="client_id"/>
+  <Allow countRef="verifyapikey.VA-VerifyAPIKey.apiproduct.developer.quota.limit"/>
+  <Interval ref="verifyapikey.VA-VerifyAPIKey.apiproduct.developer.quota.interval"/>
+  <TimeUnit ref="verifyapikey.VA-VerifyAPIKey.apiproduct.developer.quota.timeunit"/>
+  <MessageWeight ref="totalTokens"/>
+  <Distributed>true</Distributed>
+  <Synchronous>true</Synchronous>
+  <CountOnly>true</CountOnly>
+  <SharedName>token-quota</SharedName>
+</Quota>

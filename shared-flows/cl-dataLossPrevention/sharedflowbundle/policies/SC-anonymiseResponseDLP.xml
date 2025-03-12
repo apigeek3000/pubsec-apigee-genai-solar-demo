@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ServiceCallout continueOnError="false" enabled="true" name="SC-anonymiseResponseDLP">
+  <DisplayName>SC-anonymiseResponseDLP</DisplayName>
+  <Properties/>
+  <Request clearPayload="true" variable="myRequest">
+    <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+    <Set>
+      <Verb>POST</Verb>
+      <Headers>
+        <Header name="Content-Type">application/json</Header>
+        <Header name="x-goog-user-project">{organization.name}</Header>
+      </Headers>
+      <Payload contentType="application/json; charset=utf-8">
+           { "inspectConfig": { "infoTypes": [{"name": "PERSON_NAME" },{ "name": "EMAIL_ADDRESS" },{ "name": "PHONE_NUMBER" }, { "name": "LOCATION" }] },"deidentifyConfig": {"infoTypeTransformations": {"transformations": [{ "primitiveTransformation": { "replaceConfig": { "newValue": { "stringValue": "[REMOVED]" } } } }] } }, "item": { "value": "{escapeJSON(dlpContent)}" } }
+      </Payload>
+    </Set>
+  </Request>
+  <Response>dlpResponse</Response>
+  <HTTPTargetConnection>
+    <Properties/>
+    <URL>https://dlp.googleapis.com/v2/projects/{organization.name}/content:deidentify</URL>
+    <Authentication>
+      <GoogleAccessToken>
+        <Scopes>
+          <Scope>https://www.googleapis.com/auth/cloud-platform</Scope>
+        </Scopes>
+      </GoogleAccessToken>
+    </Authentication>
+  </HTTPTargetConnection>
+</ServiceCallout>

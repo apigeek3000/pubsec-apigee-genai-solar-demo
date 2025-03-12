@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SharedFlow name="default">
+  <Step>
+    <Name>SC-anonymiseResponseDLP</Name>
+  </Step>
+  <Step>
+    <Name>EV-extractDLPResponse</Name>
+  </Step>
+</SharedFlow>

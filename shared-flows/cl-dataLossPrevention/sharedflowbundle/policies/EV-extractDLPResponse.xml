@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables continueOnError="false" enabled="true" name="EV-extractDLPResponse">
+  <DisplayName>EV-extractDLPResponse</DisplayName>
+  <Properties/>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <JSONPayload>
+    <Variable name="dlpResponse">
+      <JSONPath>$.item.value</JSONPath>
+    </Variable>
+  </JSONPayload>
+  <Source clearPayload="false">dlpResponse</Source>
+  <VariablePrefix/>
+</ExtractVariables>

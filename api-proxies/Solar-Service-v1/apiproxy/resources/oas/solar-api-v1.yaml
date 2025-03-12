@@ -1,0 +1,117 @@
+openapi: 3.0.0
+info:
+  title: Solar Panel Estimation API
+  description: This API lets users get solar panel energy and cost estimations based on their address. Try API with our chat application in [GenAI Solar page](https://bap-emea-apigee-5-cltest.apigee.io/prompt).
+  version: 1.0.0
+servers:
+  - url: https://example-api.nip.io/v1/solar-service
+security:
+  - ApiKeyAuth: []
+paths:
+  /data:
+    post:
+      operationId: getSolarEstimation
+      description: Gets a solar energy potential estimation based on an address.
+      requestBody:
+        description: The address to calculate the solar potential of.
+        content:
+          application/json:
+            schema:
+              type: object
+              description: The address of a location to check the solar potential.
+              properties:
+                address:
+                  description: The address to check the solar potential of.
+                  type: string
+                  example: Landsvägen 40, 172 63 Sundbyberg, Sweden
+              example: { "address": "Landsvägen 40, 172 63 Sundbyberg, Sweden"}
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SolarEstimation'
+          description: Solar panel estimation created successfully for the given address.
+      summary: Create a new solar panel estimation for a given address.
+  /question:
+    post:
+      operationId: answerSolarQuestion
+      description: Answers general questions about solar energy.
+      requestBody:
+        description: A question about solar energy.
+        content:
+          application/json:
+            schema:
+              type: object
+              description: The question about solar energy.
+              properties:
+                question:
+                  description: The question text about solar energy.
+                  type: string
+                  example: What are the most efficient types of solar panels?
+              example: { "question": "What are the most efficient types of solar panels?"}
+      responses:
+        '200':
+          description: Successfully retrieved answer to the solar energy question.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: The answer to the solar energy question.
+                properties:
+                  answer:
+                    description: The answer text to the solar energy question.
+                    type: string
+                    example: The most efficient solar panels are MVP solar panels.
+                example: { "answer": "The most efficient solar panels are MVP solar panels."}
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: x-api-key
+      in: header
+  schemas:
+    SolarEstimation:
+      description: >-
+        An estimation of the cost and savings of installing solar panels at a
+        specific location.
+      properties:
+        address:
+          type: string
+          description: The address that was sent to create the solar energy estimation for.
+          example: Landsvägen 40, 172 63 Sundbyberg, Sweden
+        breakEvenInYears:
+          description: How many years would it potentially take to break even with the investment and earnings of the solar panel installation.
+          type: number
+          example: 12
+        carbonOffsetFactorKgPerMwh:
+          description: The carbon offset of factor of Kg CO2 per Mwh.
+          type: number
+          example: 10000
+        costToInstallPanels:
+          description: The estimated cost to install the solar panels on the roof of the given address.
+          type: number
+          example: 161357.12
+        marketValueOfKwPotentialPerYear:
+          description: The potential market value of the energy produced in one year by the solar panels.
+          type: number
+          example: 9432432423.12
+        maxArrayAreaMeters2:
+          description: The max area in m2 that could be used for solar panels.
+          type: number
+          example: 144
+        maxArrayPanelsCount:
+          description: The max number of solar panels that the roof could support.
+          type: number
+          example: 171
+        maxSunshineHoursPerYear:
+          description: The maximum number of hours of sunlight that the roof receives per year.
+          type: number
+          example: 1000
+        totalKwPotentialPerYear:
+          description: The total Kwh of energy potential that could be produced in a year with the solar panels.
+          type: number
+          example: 172010
+      type: object
+      example: {"address":"Landsvägen 40, 172 63 Sundbyberg, Sweden","maxArrayPanelsCount":171,"maxArrayAreaMeters2":279.8928,"maxSunshineHoursPerYear":1107.2517,"carbonOffsetFactorKgPerMwh":11.999986,"totalKwPotentialPerYear":75736.01628,"marketValueOfKwPotentialPerYear":7573.601628,"costToInstallPanels":164160,"breakEvenInYears":22}

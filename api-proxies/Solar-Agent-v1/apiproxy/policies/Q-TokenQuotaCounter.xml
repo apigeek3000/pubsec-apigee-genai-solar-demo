@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Quota continueOnError="false" enabled="true" name="Q-TokenQuotaCounter" type="flexi">
+  <DisplayName>Q-TokenQuotaCounter</DisplayName>
+  <Properties/>
+  <Identifier ref="client_id"/>
+  <Interval ref="verifyapikey.VA-VerifyKey.apiproduct.developer.quota.interval"/>1
+  <TimeUnit ref="verifyapikey.VA-VerifyKey.apiproduct.developer.quota.timeunit"/>
+  <Allow countRef="verifyapikey.VA-VerifyKey.apiproduct.developer.quota.limit"/>
+  <MessageWeight ref="totalTokens"/>
+  <Distributed>true</Distributed>
+  <Synchronous>true</Synchronous>
+</Quota>

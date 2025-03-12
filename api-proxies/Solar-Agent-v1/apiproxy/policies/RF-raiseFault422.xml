@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RaiseFault continueOnError="false" enabled="true" name="RF-raiseFault422">
+  <DisplayName>RF-raiseFault422</DisplayName>
+  <Properties/>
+  <FaultResponse>
+    <Set>
+      <Headers/>
+      <Payload contentType="text/json">
+           {"message": "prompt is not valid", "Model Armor Errors":"{modeleArmor_error}"}
+      </Payload>
+      <StatusCode>422</StatusCode>
+      <ReasonPhrase>Unprocessable Content</ReasonPhrase>
+    </Set>
+  </FaultResponse>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</RaiseFault>
