@@ -7,8 +7,8 @@ import mesop as me
 
 SESSION_ID = "1" # Use any alphanumeric string to determine new conversation/session
 PROMPT_EXAMPLES = [
-  "What are the most efficient types of solar panels?",
-  "Create a new solar panel estimation for the given address. ",
+  "What is the most efficient type of solar panel?",
+  "Is this a good location for a solar panel?",
   "Can you tell me more about the solar panel financials at that location?"
 ]
 APIGEE_KEY = os.environ.get("APIGEE_KEY")

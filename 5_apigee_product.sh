@@ -39,19 +39,21 @@ echo "Passed variable tests"
 echo "Setting project to $PROJECT"
 gcloud config set project $PROJECT
 
-echo "Enabling services..."
-gcloud services enable aiplatform.googleapis.com
-gcloud services enable solar.googleapis.com
-gcloud services enable geocoding-backend.googleapis.com
-gcloud services enable modelarmor.googleapis.com
-gcloud services enable dlp.googleapis.com
+export TOKEN=$(gcloud auth print-access-token)
 
-echo "Creating service account..."
-gcloud iam service-accounts create solarservice \
-  --description="Service service account" \
-  --display-name="Solar Service"
+echo "Installing apigeecli"
+curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
+export PATH=$PATH:$HOME/.apigeecli/bin
 
-echo "Granting service account permissions..."
-gcloud projects add-iam-policy-binding $PROJECT \
-    --member="serviceAccount:solarservice@$PROJECT.iam.gserviceaccount.com" \
-    --role="roles/aiplatform.user",
+echo "Creating API Products"
+apigeecli products create --name solar-product --display-name "solar-product" --opgrp ./5_solar_product.json --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN"
+
+echo "Creating Developer"
+apigeecli developers create --user solaruser --email solarusers@example.com --first Solar --last User --org "$PROJECT" --token "$TOKEN"
+
+echo "Creating Developer Apps"
+apigeecli apps create --name solar-app --email solarusers@example.com --prods solar-product --org "$PROJECT" --token "$TOKEN" --disable-check
+
+echo " "
+echo "Successfully created Apigee solar product, developer, and app"
+echo " "

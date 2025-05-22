@@ -30,7 +30,7 @@
     <google-codelab-step label="Introduction" duration="0">
 
 <p class="image-container"><img style="width: 624.00px" src="img/4ca5c63277f7d968.png"></p>
-<p><strong>Last Updated: </strong>2024-03-15</p>
+<p><strong>Last Updated: </strong>2025-03-12</p>
 <h2 is-upgraded><strong>Overview</strong></h2>
 <p>In this lab we are going to use the <strong>Apigee API Platform</strong> to first design and publish an API to an example backend service (in this case the Google Maps Solar API), and then use the new <strong>Tools</strong> feature in <strong>Vertex Conversations</strong> to let users utilize this API in their LLM conversations. And finally we&#39;re going to publish a custom LLM model through our API, bringing security and ecosystem access to our Gen AI models and features.</p>
 <h3 is-upgraded><strong>Why APIs with Gen AI?</strong></h3>
@@ -49,18 +49,18 @@
 <ul>
 <li>A Gemini pro model to answer all solar power questions is also published behind the API.</li>
 <li>You will configure a Vertex AI Conversation Agent that connects to the API and offers users the ability to to use the service in their chat to estimate the solar potential of the roof on their property, as well as to offer the solar LLM model detailed questions about solar energy for providers.</li>
+<li>Then, you will put an Apigee API in front of our Conversation Agent to protect the LLM service. This API will also include Model Armor to prevent against prompt injection and sensitive data leakage.</li>
 <li>You could also connect ChatGPT to your API as well using the same mechanism (not covered in this lab). It&#39;s a multi-model world, so let&#39;s be prepared for it!</li>
 </ul>
 <p>Here&#39;s an overview of the architecture that we will build in this lab:</p>
-<!-- UPDATE IMAGE HERE -->
+<p class="image-container"><img style="width: 680.35px" src="../images/architecture-V3.png"></p>
 <p class="image-container"><img style="width: 680.35px" src="img/3048eb22e5985d8.png"></p>
-<p>The boxes in gray above are not covered in this lab, but can be easily explored as add-ons using the Apigee &amp; Cloud Armor documentation.</p>
 <h2 class="checklist" is-upgraded><strong>What you&#39;ll learn</strong></h2>
 <!-- UPDATE TO EMPHASIZE NEW SECURITY STUFF -->
 <ul class="checklist">
-<li>How Apigee is used to integrate existing services into LLM ecosystems such as Vertex AI Conversations using Gemini Pro.</li>
+<li>How Apigee is used to integrate existing services into LLM ecosystems & to secure the LLM ecosystems themselves.</li>
 <li>How to configure Apigee to secure and make both existing and new Gen AI models &amp; services  available to clients.</li>
-<li>How Google Cloud services such as Apigee &amp; Vertex AI make the process of publishing Gen AI models secure, scalable and endlessly extensible.</li>
+<li>How Google Cloud services such as Apigee, Model Armor, &amp; Vertex AI make the process of publishing Gen AI models secure, scalable and endlessly extensible.</li>
 </ul>
 <p>This codelab is on the Apigee and Vertex AI aspects of publishing and integrating Gen AI models with APIs, but of course there are many adjacent services and features, such as the Application Integration workflows or advanced Dialog Flow features that can also be explored.</p>
 <h2 is-upgraded><strong>What you&#39;ll need</strong></h2>
@@ -115,7 +115,7 @@ cd pubsec-apigee-genai-solar-demo</code></pre>
 
     </google-codelab-step>
     <google-codelab-step label="Deploy Apigee assets" duration="20">
-
+<!-- SCRIPTS WERE CREATED FOR THIS-->
 <h2 is-upgraded><strong>Set up your environment</strong></h2>
 <p>We need to automate the deployment of our demo assets, and so will be using the <a href="https://cloud.google.com/sdk/docs/install" target="_blank">gcloud CLI</a> to deploy a lot of our assets. Make sure <strong>gcloud</strong> is installed (installed by default in Cloud Shell).</p>
 <p>Now we need to set our environment information for further automation commands. Let&#39;s make a copy of the environment file 1_env.sh, edit with our own environment information, and then source it in our shell. </p>
@@ -128,26 +128,24 @@ export APIGEE_ENVIRONMENT=YOUR ENVIRONMENT</code></pre>
 <pre><code>source 1_env.dev.sh</code></pre>
 <p>Now also set the project in gcloud.</p>
 <pre><code>gcloud config set project $PROJECT</code></pre>
-<!-- UPDATE API ENABLING HERE -->
 <p>Also enable Vertex AI and the Google Maps Geocoding API  in our project using gcloud. </p>
 <pre><code>gcloud services enable aiplatform.googleapis.com
 gcloud services enable solar.googleapis.com 
-gcloud services enable geocoding-backend.googleapis.com</code></pre>
+gcloud services enable geocoding-backend.googleapis.com
+gcloud services enable modelarmor.googleapis.com</code></pre>
 <h2 is-upgraded><strong>Create a service account</strong></h2>
-<!-- UPDATE SA DESCRIPTION -->
 <p>A service account in Google Cloud is used to authorize service-to-service communication, and is a great way to enforce authorization without storing keys anywhere (using <a href="https://cloud.google.com/docs/authentication/provide-credentials-adc" target="_blank">default application credentials</a>).</p>
 <p>Let&#39;s create a service account for any service-to-service communication in this demo.</p>
 <pre><code>gcloud iam service-accounts create solarservice \
     --description=&#34;Solar service account&#34; \
-    --display-name=&#34;Solar service&#34;</code></pre>
-<p>Now give the account the role access to use the Gemini Pro model. This will allow our API (which will use this service account) to access Vertex AI models such as Gemini Pro. If prompted, specify None as a policy condition.</p>
+    --display-name=&#34;Solar Service&#34;</code></pre>
+<p>Now give the account the role access to use the Gemini LLM model. This will allow our Apigee API (which will use this service account) to access Vertex AI models such as Gemini. If prompted, specify None as a policy condition.</p>
 <!-- UPDATE SA ROLES -->
 <pre><code>gcloud projects add-iam-policy-binding $PROJECT \
 --member=&#34;serviceAccount:solarservice@$PROJECT.iam.gserviceaccount.com&#34; \
---role=&#34;roles/aiplatform.user&#34;
+--role=&#34;roles/aiplatform.user&#34;,roles/modelarmor.admin
 </code></pre>
 <h2 is-upgraded>Storing keys</h2>
-<!-- ANY NEW KVMS? -->
 <p>In order to deploy an Apigee proxy that can use the Google Maps Solar API, we need a secure place to store our Google Maps API key. For that we are going to create an <a href="https://cloud.google.com/apigee/docs/api-platform/cache/key-value-maps" target="_blank">Apigee KeyValueMap (KVM)</a>, where we can encrypt and store any data needed at runtime, such as API keys.</p>
 <p>First we will create a KVM object in Apigee where we can store and access our keys. We will use <strong>apigeecli </strong>to create it by running this command.</p>
 <pre><code>apigeecli kvms create -e $APIGEE_ENVIRONMENT -n solar-keys -o $PROJECT -t $(gcloud auth print-access-token)</code></pre>

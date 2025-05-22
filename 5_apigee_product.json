@@ -1,0 +1,19 @@
+{
+  "operationConfigs": [
+    {
+      "apiSource": [
+        "Solar-Agent-v1",
+        "Solar-Service-v1"
+      ],
+      "operations": [
+        {
+          "resource": "/",
+          "methods": [
+            "GET", "POST"
+          ]
+        }
+      ]
+    }
+  ],
+  "operationConfigType": "proxy"
+}
